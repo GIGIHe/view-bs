@@ -12,7 +12,7 @@
       <div class="order_img">
         <img
           :src="orderData.goods.poster"
-          alt=""
+          alt="商品头图"
         >
       </div>
       <div class="order_con">
@@ -21,7 +21,7 @@
         <p><span class="label">实付款:</span><span>￥{{orderData.total_price}}</span></p>
         <p><span class="label">商品描述:</span><span>{{orderData.goods.g_desc}}</span></p>
         <p><span class="label">收货地址:</span><span>{{orderData.user.city}}{{orderData.user.area}}{{orderData.user.stress}}</span></p>
-        <p><span class="label">订单编号:</span><span>{{orderData._id}}</span></p>
+        <p><span class="label">订单编号:</span><span>{{orderData.order_id}}</span></p>
         <p><span class="label">下单时间:</span><span>{{time}}</span></p>
       </div>
     </div>
@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     time() {
-      return new Date(this.orderData.created_at).toLocaleString();
+      return new Date(this.orderData.updated_at).toLocaleString();
     }
   },
   methods: {

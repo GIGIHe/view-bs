@@ -23,8 +23,6 @@ export default {
       this.$axios.get('/goods/5cb337e35772082678ee80c6').then(res => {
         if (res.code == 200) {
           this.listData = res.data;
-
-
         } else {
           this.$message({
             type: "warning",

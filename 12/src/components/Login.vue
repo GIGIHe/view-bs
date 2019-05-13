@@ -1,6 +1,7 @@
 <template>
   <div class="login_wrap">
     <div class="from_wrap">
+      <h2 class="L_logo"></h2>
       <el-form
         :model="ruleForm"
         status-icon
@@ -128,11 +129,11 @@ export default {
             type: "success",
             message: res.msg
           });
-          this.$store.commit('CHANGE_USER',res.data)
+          this.$store.commit("CHANGE_USER", res.data);
           setTimeout(() => {
             this.$router.push("/");
           }, 1000);
-        }else{
+        } else {
           this.$message({
             type: "warning",
             message: res.msg
@@ -151,7 +152,7 @@ export default {
             this.isShow = false;
           }, 1000);
           // this.ruleForm = ""
-        }else{
+        } else {
           this.$message({
             type: "warning",
             message: res.msg
@@ -165,14 +166,21 @@ export default {
 
 <style lang="scss" scoped>
 .login_wrap {
- position: fixed;
+  position: fixed;
   left: 0;
   bottom: 0;
   top: 0;
   right: 0;
-  background: url("../assets/timg.jpg") no-repeat center;
-  background-size: cover;
+  // background: url("../assets/timg.jpg") no-repeat center;
+  // background-size: cover;
   overflow: hidden;
+  .L_logo {
+    height: 50px;
+    margin: auto;
+    background: url("../assets/ll.png") no-repeat center;
+    margin-bottom: 10px;
+    margin-left: 40px;
+  }
 }
 .from_wrap {
   width: 350px;
@@ -183,17 +191,16 @@ export default {
   height: 350px;
   box-sizing: border-box;
   position: fixed;
-  right: 10%;
-  top: 20%;
-  background: rgba(0, 0, 0, 0.5);
-  padding-top: 55px;
-  padding-right: 58px;
+  right: 36%;
+  top: 15%;
+  padding-top: 42px;
+  padding-right: 57px;
+  border: 1px solid #eee;
+  box-shadow: 2px 0 46px rgba(0, 0, 0, 0.18);
   .submit {
     margin-left: 55px;
   }
-  /deep/ .el-form-item__label {
-    color: #fff;
-  }
+
   a {
     display: block;
     text-align: center;

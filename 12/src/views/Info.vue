@@ -146,7 +146,7 @@ export default {
         area:  this.userInfo.area,
         stress: this.value
       };
-      console.log(this.form.avatar);
+      // console.log(this.form.avatar);
       this.$axios.patch(`/user/${id}`, this.form).then(res => {
         if (res.code == 200) {
           this.$store.commit("CHANGE_USER", res.data);
@@ -160,7 +160,7 @@ export default {
           }, 1000);
         } else {
           this.$message({
-            message: res.msg,
+            message: "用户名已被占用",
             type: "error"
           });
         }

@@ -93,21 +93,88 @@
         class="take_it"
         @click="take_it"
       >购买</span>
+      <span
+        class="sure_addr"
+        @click="sure_addr"
+      >确认地址</span>
     </div>
+    <el-card
+      class="box-card c_card"
+      v-if="show_a"
+    >
+      <div class="text item">
+        <span
+          class="close"
+          @click="handleClose"
+        >X</span>
+        <el-form>
+          <el-form-item>
+            <el-input
+              v-model="userInfo.city"
+              class="input"
+              disabled
+            ></el-input>
+            <el-input
+              v-model="userInfo.area"
+              class="input"
+              disabled
+            ></el-input>
+            <el-select
+              v-model="value"
+              clearable
+              :placeholder="userInfo.stress"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.value"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="sure">确定</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
       // checked: true,
       listData: [],
       total: 0,
-      goodlist: []
+      goodlist: [],
+      value: "",
+      show_a: false,
+      options: [
+        {
+          value: "板桥镇"
+        },
+        {
+          value: "古城乡"
+        },
+        {
+          value: "关王庙乡"
+        },
+        {
+          value: "胡庙乡"
+        },
+        {
+          value: "开街道"
+        }
+      ]
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(["userInfo"])
+  },
   mounted() {
     this.getData();
   },
@@ -124,30 +191,6 @@ export default {
           });
         }
       });
-    },
-    handleChange(value, y) {
-      console.log(value, y);
-      let id = y;
-      this.$axios.patch(`/carlist/${id}`, { counts: value }).then(res => {
-        if (res.code == 200) {
-          this.$message({
-            type: "success",
-            message: "修改成功"
-          });
-          //  this.total =
-        }
-      });
-    },
-    handleSel(value) {
-      // console.log(this.goodlist);
-      // console.log(value.goods.g_price);
-      this.goodlist = value;
-      let s = 0;
-      for (let m = 0; m < value.length; m++) {
-        s += parseFloat(value[m].counts * value[m].goods.g_price);
-      }
-
-      this.total = s;
     },
     handleDel(id) {
       console.log(id);
@@ -170,6 +213,22 @@ export default {
           });
         });
     },
+    //修改购物车数量
+    handleChange(value, y) {
+      // console.log(value, y);
+      let id = y;
+      this.$axios.patch(`/carlist/${id}`, { counts: value }).then(res => {
+        if (res.code == 200) {
+          this.$message({
+            type: "success",
+            message: "修改成功"
+          });
+          //  this.total =
+        }
+      });
+    },
+
+    // 全选
     handleSelectionChange(value) {
       // console.log(value);
       this.goodlist = value;
@@ -179,23 +238,85 @@ export default {
       });
       this.total = i;
     },
-    take_it() {
-      // 定义变量 changAll
-      this.$axios.post("/order", { goodlist: this.goodlist,total_price:this.total }).then(res => {
-        // console.log(res);
+    // 单选
+    handleSel(value) {
+      // console.log(this.goodlist);
+      // console.log(value.goods.g_price);
+      this.goodlist = value;
+      let s = 0;
+      for (let m = 0; m < value.length; m++) {
+        s += parseFloat(value[m].counts * value[m].goods.g_price);
+      }
+
+      this.total = s;
+    },
+    // 关闭弹窗
+    handleClose() {
+      this.show_a = false;
+    },
+    sure_addr(){
+      this.show_a = true;
+    },
+    sure() {
+      let id = this.userInfo._id;
+      this.form = {
+        city: this.userInfo.city,
+        area: this.userInfo.area,
+        stress: this.value
+      };
+        this.$axios
+        .patch(`/user/addr/${id}`, {
+          city: this.form.city,
+          area: this.form.area,
+          stress: this.form.stress
+        })
+        .then(res => {
+          if (res.code == 200) {
+            this.show_a = false;
+             this.$message({
+              type: "success",
+              message: "地址已确定"
+            });
+          } else {
             this.$message({
-              type:"success",
-              message:res.msg
-            })
-      });
-    }
+              type: "success",
+              message: "地址无效"
+            });
+          }
+        });
+    },
+    take_it() {
+      this.$axios
+        .post("/order", {
+          goodlist: this.goodlist,
+          total_price: this.total
+        })
+        .then(res => {
+          // console.log(res);
+          if (res.code == 200) {
+            this.$message({
+              type: "success",
+              message: res.msg
+            });
+          } else {
+            this.$message({
+              type: "success",
+              message: res.msg
+            });
+          }
+        });
+    },
+
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.car_wrap{
+.car_wrap {
   margin-bottom: 60px;
+  /deep/ .el-input {
+    width: auto;
+  }
 }
 .table {
   max-width: 1000px;
@@ -219,13 +340,24 @@ export default {
     color: #ff6700;
   }
   .take_it {
-    width: 200px;
+    width: 140px;
     height: 40px;
     background: #ff6700;
-    border-radius: 20px;
+    border-radius: 10px;
     text-align: center;
     line-height: 40px;
     color: #fff;
+    cursor: pointer;
+    margin-left: 440px;
+  }
+  .sure_addr {
+    width: 99px;
+    height: 40px;
+    border: 1px solid #409eff;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 40px;
+    color: #666;
     cursor: pointer;
   }
 }
@@ -238,5 +370,20 @@ export default {
   // text-align: center !important;
   margin-left: 194px;
   font-size: 16px;
+}
+.c_card {
+  width: 50%;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 99;
+  transform: translate(-50%, -50%);
+}
+.close {
+  position: absolute;
+  top: 0;
+  right: 5px;
+  color: #ccb9b9;
+  cursor: pointer;
 }
 </style>
