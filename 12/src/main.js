@@ -9,7 +9,10 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import VueLazyload from 'vue-lazyload'
 import axios from "./ultils/index";
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
 
+Vue.use(VueAwesomeSwiper)
 Vue.prototype.$axios = axios;
 Vue.use(ElementUI)
 Vue.config.productionTip = false

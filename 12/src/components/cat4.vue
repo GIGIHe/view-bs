@@ -20,7 +20,7 @@ export default {
   },
   methods:{
     getData() {
-      this.$axios.get('/goods/5cd0d6ac56d3e61110cb89d4').then(res => {
+      this.$axios.get('/goods/5cda21b01a14ca17dcc4b1b0').then(res => {
         if (res.code == 200) {
           this.listData = res.data;
 

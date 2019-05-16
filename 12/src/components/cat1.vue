@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <muban :listData = "listData"></muban>
   </div>
 </template>
@@ -20,7 +21,7 @@ export default {
   },
   methods:{
     getData() {
-      this.$axios.get('/goods/5cb337e35772082678ee80c6').then(res => {
+      this.$axios.get('/goods/5cda219b1a14ca17dcc4b1ae').then(res => {
         if (res.code == 200) {
           this.listData = res.data;
         } else {
@@ -36,4 +37,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.causl{
+  border:1px solid red;
+  margin-top: 60px;
+  height: 40px;
+  overflow: hidden;
+  .items{
+    widows: 100px;
+    border: 1px solid black;
+  }
+}
 </style>
